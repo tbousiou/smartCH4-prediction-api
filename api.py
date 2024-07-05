@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Query
+from fastapi.responses import HTMLResponse
 from pydantic import BaseModel
 from typing import List
 from darts.models import RNNModel
@@ -23,14 +24,26 @@ class InputData(BaseModel):
 
 
 app = FastAPI(
-    title="smartCH4 methane  prediction API",
+    title="smartCH4 Methane Prediction API",
     description="Predict the methane production of a biogas plant using the smartCH4 prediction model"
 )
 
 
-@app.get("/")
-def home():
-    return "This is the root endpoint, everything is working fine! Use /docs to see the API documentation."
+@app.get("/", response_class=HTMLResponse)
+async def root():
+    return """
+    <html>
+        <head>
+            <title>ssmartCH4 Methane Prediction API</title>
+        </head>
+        <body>
+            <h1>smartCH4 Methane Prediction API</h1>
+            <p>Predict the methane production of a biogas plant using the smartCH4 prediction model</p>
+            <p>Go to <a href="docs">/docs</a> to see the API documentation.</p>
+            <p><a href="https://github.com/tbousiou/smartCH4-prediction-api">GitHub repository</a></p>
+        </body>
+    </html>
+    """
 
 
 @app.post("/predict/")
